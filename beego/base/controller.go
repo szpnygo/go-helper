@@ -42,10 +42,6 @@ func (bc *BController) DeviceID() string{
 	return bc.Ctx.Input.Header("X-Device-Id")
 }
 
-func (bc *BController) Token() string {
-	return bc.Ctx.Input.Header("Memo-Access-Token")
-}
-
 // ResultSuccess just return code 0
 func (bc *BController) ResultSuccess(data interface{}) Struct {
 	return bc.Result(0, data, "")
@@ -67,8 +63,4 @@ func (bc *BController) ResultJSON(code int, data interface{}, message string) {
 	bc.Ctx.Input.SetData("response", bc.Result(code, data, message))
 	bc.Ctx.ResponseWriter.Header().Set("Version", beego.AppConfig.String("version"))
 	bc.ServeJSON()
-}
-
-func (bc *BController) NotLogin() {
-	bc.ResultJSON(201502006, nil, "账号过期，请重新登陆")
 }

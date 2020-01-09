@@ -1,8 +1,8 @@
 package router
 
 import (
-	check "neobaran.com/neo/beego/controllers"
-	"neobaran.com/neo/memo/filter"
+	check "tools/neo/beego/controllers"
+	"tools/neo/beego/filter"
 
 	"github.com/astaxie/beego"
 )

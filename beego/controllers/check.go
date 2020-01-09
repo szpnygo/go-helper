@@ -10,7 +10,7 @@ type CheckController struct {
 	base.BController
 }
 
-// CreateLog create memo app log
+// CreateLog create app log
 func (c *CheckController) Check() {
 	c.SuccessJSON(beego.AppConfig.String("version"))
 }
