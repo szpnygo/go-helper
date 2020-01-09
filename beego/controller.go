@@ -1,4 +1,4 @@
-package base
+package beego
 
 import (
 	"github.com/astaxie/beego"

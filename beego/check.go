@@ -1,13 +1,12 @@
-package controllers
+package beego
 
 import (
 	"github.com/astaxie/beego"
-	"neobaran.com/neo/beego/base"
 )
 
 // CheckController controllers
 type CheckController struct {
-	base.BController
+	BController
 }
 
 // CreateLog create app log

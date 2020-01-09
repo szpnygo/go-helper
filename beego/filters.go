@@ -1,4 +1,4 @@
-package filter
+package beego
 
 import (
 	"encoding/json"
