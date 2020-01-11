@@ -1,4 +1,4 @@
-package beego
+package redis
 
 import (
 	"fmt"
