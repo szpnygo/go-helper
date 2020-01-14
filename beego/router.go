@@ -11,3 +11,7 @@ func CheckRouter() beego.LinkNamespace {
 func ApiFilter() {
 	beego.InsertFilter("/*", beego.AfterExec, ApiLogFilter, false, false)
 }
+
+func JsonFilter() {
+	beego.InsertFilter("/*", beego.BeforeExec, JsonRequestFilter, false, false)
+}

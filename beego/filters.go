@@ -2,9 +2,12 @@ package beego
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 type ApiLog struct {
@@ -42,5 +45,32 @@ func apiLog(ctx *context.Context) {
 	response, err := json.MarshalIndent(apiLog, "", "    ")
 	if err == nil {
 		logs.Info("\n" + string(response) + "\n")
+	}
+}
+
+var JsonRequestFilter = func(ctx *context.Context) {
+
+	var m interface{}
+	err := json.Unmarshal(ctx.Input.RequestBody, &m)
+	if err == nil && m != nil {
+		var result map[string]interface{}
+		result = m.(map[string]interface{})
+		for k, v := range result {
+			switch v.(type) {
+			case string:
+				ctx.Input.SetParam(k, v.(string))
+			case int:
+				ctx.Input.SetParam(k, strconv.Itoa(v.(int)))
+			case bool:
+				ctx.Input.SetParam(k, strconv.FormatBool(v.(bool)))
+			case float64:
+				str := fmt.Sprintf("%v", v)
+				if strings.Contains(str, ".") {
+					ctx.Input.SetParam(k, str)
+				} else {
+					ctx.Input.SetParam(k, strconv.Itoa(int(v.(float64))))
+				}
+			}
+		}
 	}
 }
