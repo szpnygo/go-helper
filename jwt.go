@@ -3,6 +3,7 @@ package neo
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"strconv"
 	"time"
 )
 
@@ -56,6 +57,12 @@ func ValidatingToken(tokenString string, config JWTConfig) (string, error) {
 		}
 		if claims["jti"] != config.Id {
 			return "", fmt.Errorf("jti is invalid")
+		}
+		switch claims["uid"].(type) {
+		case int:
+			return strconv.Itoa(claims["uid"].(int)), nil
+		case float64:
+			return strconv.Itoa(int(claims["uid"].(float64))), nil
 		}
 		return claims["uid"].(string), nil
 	}
