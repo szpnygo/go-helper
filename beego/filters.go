@@ -24,6 +24,10 @@ var ApiLogFilter = func(ctx *context.Context) {
 	go apiLog(ctx)
 }
 
+var ApiLogFilter2 = func(ctx *context.Context, header []string) {
+	go apiLog2(ctx, header)
+}
+
 func apiLog(ctx *context.Context) {
 	uidID := ctx.Input.GetData("uid")
 	if uidID != nil {
@@ -37,6 +41,40 @@ func apiLog(ctx *context.Context) {
 		Url:      ctx.Input.URL(),
 		Header:   ctx.Input.Context.Request.Header,
 		Method:   ctx.Input.Method(),
+		UserId:   uidID.(int),
+		Form:     ctx.Input.Context.Request.Form,
+		Response: ctx.Input.GetData("response"),
+	}
+
+	response, err := json.MarshalIndent(apiLog, "", "    ")
+	if err == nil {
+		logs.Info("\n" + string(response) + "\n")
+	}
+}
+
+func apiLog2(ctx *context.Context, headers []string) {
+	uidID := ctx.Input.GetData("uid")
+	if uidID != nil {
+		uidID = uidID.(int)
+	} else {
+		uidID = -1
+	}
+
+	showHeader := map[string]string{}
+	rh := ctx.Input.Context.Request.Header
+	for _, h := range headers {
+		if _, ok := rh[h]; ok {
+			if len(rh[h]) > 0 {
+				showHeader[h] = rh[h][0]
+			}
+		}
+	}
+
+	apiLog := ApiLog{
+		Ip:       ctx.Input.IP(),
+		Url:      ctx.Input.URL(),
+		Method:   ctx.Input.Method(),
+		Header:   showHeader,
 		UserId:   uidID.(int),
 		Form:     ctx.Input.Context.Request.Form,
 		Response: ctx.Input.GetData("response"),
