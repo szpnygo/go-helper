@@ -18,16 +18,22 @@ type JWTConfig struct {
 	Issuer    string
 	ExpiresAt int64
 	Key       string
+	Audience  string
 }
 
 //time.Now().Add(60 * 24 * 360 * time.Minute).Unix()
 func CreateToken(uid string, config JWTConfig) string {
+	audience := config.Audience
+	if len(audience) == 0 {
+		audience = "https://neobaran.com"
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, UserClaims{
 		uid,
 		jwt.StandardClaims{
 			Id:        config.Id,
 			Issuer:    config.Issuer,
-			Audience:  "https://neobaran.com",
+			Audience:  audience,
 			IssuedAt:  time.Now().Unix(),
 			ExpiresAt: config.ExpiresAt,
 		},
